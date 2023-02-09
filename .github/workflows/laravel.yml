@@ -20,6 +20,8 @@ jobs:
       run: php -r "file_exists('./src/.env') || copy('./src/.env.example', '.env');"
     - name: Move to App Source Directory
       run: cd ./src
+    - name: Move to app
+      run: ls -la
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
