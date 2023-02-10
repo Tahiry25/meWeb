@@ -59,6 +59,8 @@ jobs:
       run:
         working-directory: /var/www/tahiry.net
     steps:
+    - name: Pulling Latest Changes
+    - uses: actions/checkout@v3
     - name: Backup Previous Version
       run: ./backup.sh
     - name: Pull latest changes from GitHub
