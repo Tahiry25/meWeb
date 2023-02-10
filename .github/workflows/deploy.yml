@@ -59,7 +59,8 @@ jobs:
       run:
         working-directory: /var/www/tahiry.net
     steps:
-    - uses: actions/checkout@v3
+    - name: Pull Most Recent Changes
+      run: git pull
     - name: Compile Dependencies
       run: composer install --optimize-autoloader --no-dev
     - name: Optimize Configuration Loading
