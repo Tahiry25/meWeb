@@ -62,9 +62,7 @@ jobs:
     - name: Pull new changes
       run: git pull
     - name: Backup Previous Version
-      run: |
-        chmod -R 777 backup.sh
-        ./backup.sh
+      run: ./backup.sh
     - name: Compile Dependencies
       run: composer install --optimize-autoloader --no-dev
     - name: Optimize Configuration Loading
