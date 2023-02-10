@@ -37,3 +37,11 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
+    - name: Verify New Instance
+      run: composer install --optimize-autoloader --no-dev
+    - name: Optimize Configuration Loading
+      run: php artisan config:cache
+    - name: Optimize Route Loading
+      run: php artisan route:cache
+    - name: Optimize View Loading
+      run: php artisan view:cache
