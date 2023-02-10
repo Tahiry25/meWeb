@@ -59,9 +59,14 @@ jobs:
       run:
         working-directory: /var/www/tahiry.net
     steps:
+    - name: Backup Previous Version
+      run: |
+        cd ..
+        zip -r $(date '+%b.%Y.%d-%M').zip ./tahiry.net/*
+        rm "$(ls -1 -lt | awk ' /^-/ { print $9}' | tail -1)"
     - name: Pull latest changes from GitHub
       run: git pull
-    - name: Compile dependencies
+    - name: Compile Dependencies
       run: composer install --optimize-autoloader --no-dev
     - name: Optimize Configuration Loading
       run: php artisan config:cache
@@ -69,4 +74,3 @@ jobs:
       run: php artisan route:cache
     - name: Optimize View Loading
       run: php artisan view:cache
-
