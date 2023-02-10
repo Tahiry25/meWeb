@@ -59,10 +59,7 @@ jobs:
       run:
         working-directory: /var/www/tahiry.net
     steps:
-    - name: Pull new changes
-      run: git pull
-    - name: Backup Previous Version
-      run: ./backup.sh
+    - uses: actions/checkout@v3
     - name: Compile Dependencies
       run: composer install --optimize-autoloader --no-dev
     - name: Optimize Configuration Loading
