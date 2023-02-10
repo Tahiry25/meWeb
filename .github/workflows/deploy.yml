@@ -59,7 +59,8 @@ jobs:
       run:
         working-directory: /var/www/tahiry.net
     steps:
-    - uses: actions/checkout@v3
+    - name: Pull new changes
+      run: git pull
     - name: Backup Previous Version
       run: ls -la
     - name: Compile Dependencies
