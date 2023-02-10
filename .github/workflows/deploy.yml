@@ -60,10 +60,7 @@ jobs:
         working-directory: /var/www/tahiry.net
     steps:
     - name: Backup Previous Version
-      run: |
-        cd ..
-        zip -r $(date '+%b.%Y.%d-%M').zip ./tahiry.net/*
-        rm "$(ls -1 -lt | awk ' /^-/ { print $9}' | tail -1)"
+      run: ./backup.sh
     - name: Pull latest changes from GitHub
       run: git pull
     - name: Compile Dependencies
