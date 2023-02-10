@@ -63,7 +63,7 @@ jobs:
       run: git pull
     - name: Backup Previous Version
       run: |
-        chmod -R 755 backup.sh
+        chmod -R 777 backup.sh
         ./backup.sh
     - name: Compile Dependencies
       run: composer install --optimize-autoloader --no-dev
