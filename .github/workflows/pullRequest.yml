@@ -1,8 +1,8 @@
-name: Laravel
+name: Pull Request
+concurrency:
+  cancel-in-progress: true
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -46,22 +46,3 @@ jobs:
       run: php artisan route:cache
     - name: Optimize View Loading
       run: php artisan view:cache
-
-  Deploy:
-    needs: Build
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: /var/www/tahiry.net
-    steps:
-    - name: Pull latest changes from GitHub
-      run: git pull
-    - name: Compile dependencies
-      run: composer install --optimize-autoloader --no-dev
-    - name: Optimize Configuration Loading
-      run: php artisan config:cache
-    - name: Optimize Route Loading
-      run: php artisan route:cache
-    - name: Optimize View Loading
-      run: php artisan view:cache
-

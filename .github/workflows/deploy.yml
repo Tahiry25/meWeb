@@ -1,0 +1,70 @@
+name: Deploy
+concurrency:
+  cancel-in-progress: true
+
+on:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+    - uses: actions/checkout@v3
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Install Dependencies
+      run: |
+        composer install
+    - name: Generate key
+      run: php artisan key:generate
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
+    - name: Create Database
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: vendor/bin/phpunit
+
+  Build:
+    needs: Test
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Verify New Instance
+      run: composer install --optimize-autoloader --no-dev
+    - name: Optimize Configuration Loading
+      run: php artisan config:cache
+    - name: Optimize Route Loading
+      run: php artisan route:cache
+    - name: Optimize View Loading
+      run: php artisan view:cache
+
+  Deploy:
+    needs: Build
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: /var/www/tahiry.net
+    steps:
+    - name: Pull latest changes from GitHub
+      run: git pull
+    - name: Compile dependencies
+      run: composer install --optimize-autoloader --no-dev
+    - name: Optimize Configuration Loading
+      run: php artisan config:cache
+    - name: Optimize Route Loading
+      run: php artisan route:cache
+    - name: Optimize View Loading
+      run: php artisan view:cache
+
