@@ -1,5 +1,6 @@
 name: Pull Request
 concurrency:
+  group: ${{ github.head_ref }}
   cancel-in-progress: true
 
 on:
